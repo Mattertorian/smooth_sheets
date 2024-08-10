@@ -5,6 +5,7 @@ export 'navigation_routes.dart'
         DraggableNavigationSheetPage,
         DraggableNavigationSheetRoute,
         ScrollableNavigationSheetPage,
-        ScrollableNavigationSheetRoute;
+        ScrollableNavigationSheetRoute,
+        CupertinoScrollableNavigationSheetPage;
 export 'navigation_sheet.dart'
     show NavigationSheet, NavigationSheetTransitionObserver;

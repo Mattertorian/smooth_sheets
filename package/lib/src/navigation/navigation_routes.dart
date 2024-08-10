@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -364,4 +365,92 @@ class _PageBasedDraggableNavigationSheetRoute<T>
       child: page.child,
     );
   }
+}
+
+class CupertinoScrollableNavigationSheetPage<T> extends Page<T> {
+  const CupertinoScrollableNavigationSheetPage({
+    super.key,
+    super.name,
+    super.arguments,
+    super.restorationId,
+    this.maintainState = true,
+    this.transitionDuration = const Duration(milliseconds: 300),
+    this.initialExtent = const Extent.proportional(1),
+    this.minExtent = const Extent.proportional(1),
+    this.maxExtent = const Extent.proportional(1),
+    this.physics,
+    this.transitionsBuilder,
+    required this.child,
+  });
+
+  /// {@macro flutter.widgets.ModalRoute.maintainState}
+  final bool maintainState;
+
+  final Duration transitionDuration;
+
+  final Extent initialExtent;
+  final Extent minExtent;
+  final Extent maxExtent;
+
+  final SheetPhysics? physics;
+
+  final RouteTransitionsBuilder? transitionsBuilder;
+
+  /// The content to be shown in the [Route] created by this page.
+  final Widget child;
+
+  @override
+  Route<T> createRoute(BuildContext context) {
+    return _PageBasedCupertinoScrollableNavigationSheetRoute(page: this);
+  }
+}
+
+class _PageBasedCupertinoScrollableNavigationSheetRoute<T>
+    extends NavigationSheetRoute<T, ScrollableSheetExtent>
+    with CupertinoRouteTransitionMixin {
+  _PageBasedCupertinoScrollableNavigationSheetRoute({
+    required CupertinoScrollableNavigationSheetPage<T> page,
+  }) : super(settings: page);
+
+  CupertinoScrollableNavigationSheetPage<T> get page =>
+      settings as CupertinoScrollableNavigationSheetPage<T>;
+
+  @override
+  bool get maintainState => page.maintainState;
+
+  @override
+  Duration get transitionDuration => page.transitionDuration;
+
+  @override
+  RouteTransitionsBuilder? get transitionsBuilder => page.transitionsBuilder;
+
+  @override
+  SheetExtentScopeKey<ScrollableSheetExtent> createScopeKey() {
+    return SheetExtentScopeKey<ScrollableSheetExtent>(
+      debugLabel: kDebugMode ? '$debugLabel:${describeIdentity(this)}' : null,
+    );
+  }
+
+  @override
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
+    return _ScrollableNavigationSheetRouteContent(
+      debugLabel: '$CupertinoScrollableNavigationSheetPage(${page.name})',
+      initialExtent: page.initialExtent,
+      minExtent: page.minExtent,
+      maxExtent: page.maxExtent,
+      physics: page.physics,
+      child: page.child,
+    );
+  }
+
+  @override
+  Widget buildContent(BuildContext context) => page.child;
+
+  @override
+  // TODO: implement title
+  String? get title => 'placeholder';
 }
